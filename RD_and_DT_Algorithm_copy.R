@@ -492,9 +492,9 @@ RD_Alg_O <- function(obs_gen_para, lambda){
   return(output_final)
 }
 # 4. RD algorithm - input is the parameters of obstacle pattern (for mixed case)
-RD_Alg_M <- function(obs_gen_para, lambda){
+RD_Alg_M <- function(obs_gen_para, lambda, cost){
   # generate obstacle info
-  obs_info <- Mix_gen(obs_gen_para[1],obs_gen_para[2],obs_gen_para[3],obs_gen_para[4],obs_gen_para[5], lambda)
+  obs_info <- Mix_gen(obs_gen_para[1],obs_gen_para[2],obs_gen_para[3],obs_gen_para[4],obs_gen_para[5], lambda, cost)
   x <- 100; y <- 100; r <- 4.5
   # begin the loop to travel from s to t
   s <- 10151
@@ -801,9 +801,9 @@ DT_Alg_O <- function(obs_gen_para, lambda){
   return(output_final)
 }
 # 4. DT algorithm - input is the parameters of obstacle pattern (for mixed case)
-DT_Alg_M <- function(obs_gen_para, lambda){
+DT_Alg_M <- function(obs_gen_para, lambda, cost){
   # generate obstacle info
-  obs_info <- Mix_gen(obs_gen_para[1],obs_gen_para[2],obs_gen_para[3],obs_gen_para[4],obs_gen_para[5], lambda)
+  obs_info <- Mix_gen(obs_gen_para[1],obs_gen_para[2],obs_gen_para[3],obs_gen_para[4],obs_gen_para[5], lambda, cost)
   x <- 100; y <- 100; r <- 4.5
   # begin the loop to travel from s to t
   s <- 10151
@@ -1112,9 +1112,9 @@ AP_Alg_O <- function(obs_gen_para, lambda){
   return(output_final)
 }
 # 4. RD algorithm - input is the parameters of obstacle pattern (for mixed case)
-AP_Alg_M <- function(obs_gen_para, lambda ){
+AP_Alg_M <- function(obs_gen_para, lambda, cost){
   # generate obstacle info
-  obs_info <- Mix_gen(obs_gen_para[1],obs_gen_para[2],obs_gen_para[3],obs_gen_para[4],obs_gen_para[5], lambda)
+  obs_info <- Mix_gen(obs_gen_para[1],obs_gen_para[2],obs_gen_para[3],obs_gen_para[4],obs_gen_para[5], lambda, cost)
   x <- 100; y <- 100; r <- 4.5
   # begin the loop to travel from s to t
   s <- 10151
@@ -1433,9 +1433,9 @@ ACS_Alg_O <- function(obs_gen_para, k, lambda){
   return(output_final)
 }
 # 4. RD algorithm - input is the parameters of obstacle pattern (for mixed case)
-ACS_Alg_M <- function(obs_gen_para, k, lambda){
+ACS_Alg_M <- function(obs_gen_para, k, lambda, cost){
   # generate obstacle info
-  obs_info <- Mix_gen(obs_gen_para[1],obs_gen_para[2],obs_gen_para[3],obs_gen_para[4],obs_gen_para[5], lambda)
+  obs_info <- Mix_gen(obs_gen_para[1],obs_gen_para[2],obs_gen_para[3],obs_gen_para[4],obs_gen_para[5], lambda, cost)
   x <- 100; y <- 100; r <- 4.5
   # begin the loop to travel from s to t
   s <- 10151
