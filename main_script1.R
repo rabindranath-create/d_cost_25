@@ -1,8 +1,6 @@
 # main_script.R
 
 
-
-
 # Make sure working directory is the same as the script location (implicitly handled in GitHub Actions)
 # Print working directory
 cat("Working directory:", getwd(), "\n")
@@ -26,6 +24,7 @@ writeLines("test", file.path(output_dir, "test.txt"))
 source("RD_and_DT_Algorithm_copy.R")  # Ensure this file is in the same directory
 
 lambda <- 2
+
 
 results_1 <- data.frame(
   Run = integer(),
@@ -128,7 +127,7 @@ results_4 <- data.frame(
   N = integer()
 )
 
-cost <- 2 
+cost <- 4 
 
 for (i in 1:200) {
   set.seed(600+i)
