@@ -239,7 +239,7 @@ Obstacle_gen <- function(gamma, d, noPoints, lambda){
                             'prob'=prob, 'status'=status)
 }
 # 9. create obstacle function - mixed case
-Mix_gen <- function(gamma, d, noPoints, no_c, no_o, lambda, cost){
+Mix_gen <- function(gamma, d, noPoints, no_c, no_o, lambda, cost = 5){
   bgwin <- owin(c(10, 90),c(10, 90))
   kappa <- noPoints / (80*80)
   mypar <- list(beta = kappa, gamma = gamma, r = d) # r is the radius
@@ -370,8 +370,8 @@ RD_Alg_C <- function(obs_gen_para, lambda){
           df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- Inf
         } else{
           # adjust based on false obstacle
-          df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp]==1),3]-
-            0.5*obs_info[obs_ind_temp,3]/(1-obs_info[obs_ind_temp,4])
+          df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- pmax(0, df_edge_ed[which(Int_info[,obs_ind_temp]==1),3]+
+            0.5*obs_info[obs_ind_temp,3]/(1-obs_info[obs_ind_temp,4]))
           Int_info[which(Int_info[,obs_ind_temp]==1),obs_ind_temp] <- 0 
         }
       } else{
@@ -387,8 +387,8 @@ RD_Alg_C <- function(obs_gen_para, lambda){
           df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- Inf
         } else{
           # false obstacle
-          df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3]-
-            0.5*obs_info[obs_ind_temp2,3]/(1-obs_info[obs_ind_temp2,4])
+          df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- pmax(0, df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3]+
+            0.5*obs_info[obs_ind_temp2,3]/(1-obs_info[obs_ind_temp2,4]))
           Int_info[which(Int_info[,obs_ind_temp2]==1),obs_ind_temp2] <- 0
         }
       }
@@ -463,8 +463,8 @@ RD_Alg_O <- function(obs_gen_para, lambda){
           df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- Inf
         } else{
           # adjust based on false obstacle
-          df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp]==1),3]-
-            0.5*obs_info[obs_ind_temp,3]/(1-obs_info[obs_ind_temp,4])
+          df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- pmax(0, df_edge_ed[which(Int_info[,obs_ind_temp]==1),3]+
+            0.5*obs_info[obs_ind_temp,3]/(1-obs_info[obs_ind_temp,4]))
           Int_info[which(Int_info[,obs_ind_temp]==1),obs_ind_temp] <- 0 
         }
       } else{
@@ -480,8 +480,8 @@ RD_Alg_O <- function(obs_gen_para, lambda){
           df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- Inf
         } else{
           # false obstacle
-          df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3]-
-            0.5*obs_info[obs_ind_temp2,3]/(1-obs_info[obs_ind_temp2,4])
+          df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- pmax(0, df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3]+
+            0.5*obs_info[obs_ind_temp2,3]/(1-obs_info[obs_ind_temp2,4]))
           Int_info[which(Int_info[,obs_ind_temp2]==1),obs_ind_temp2] <- 0
         }
       }
@@ -492,9 +492,9 @@ RD_Alg_O <- function(obs_gen_para, lambda){
   return(output_final)
 }
 # 4. RD algorithm - input is the parameters of obstacle pattern (for mixed case)
-RD_Alg_M <- function(obs_gen_para, lambda, cost){
+RD_Alg_M <- function(obs_gen_para, lambda){
   # generate obstacle info
-  obs_info <- Mix_gen(obs_gen_para[1],obs_gen_para[2],obs_gen_para[3],obs_gen_para[4],obs_gen_para[5], lambda, cost)
+  obs_info <- Mix_gen(obs_gen_para[1],obs_gen_para[2],obs_gen_para[3],obs_gen_para[4],obs_gen_para[5], lambda)
   x <- 100; y <- 100; r <- 4.5
   # begin the loop to travel from s to t
   s <- 10151
@@ -555,8 +555,8 @@ RD_Alg_M <- function(obs_gen_para, lambda, cost){
           df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- Inf
         } else{
           # adjust based on false obstacle
-          df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp]==1),3]-
-            0.5*obs_info[obs_ind_temp,3]/(1-obs_info[obs_ind_temp,4])
+          df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- pmax(0, df_edge_ed[which(Int_info[,obs_ind_temp]==1),3]+
+            0.5*obs_info[obs_ind_temp,3]/(1-obs_info[obs_ind_temp,4]))
           Int_info[which(Int_info[,obs_ind_temp]==1),obs_ind_temp] <- 0 
         }
       } else{
@@ -572,8 +572,8 @@ RD_Alg_M <- function(obs_gen_para, lambda, cost){
           df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- Inf
         } else{
           # false obstacle
-          df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3]-
-            0.5*obs_info[obs_ind_temp2,3]/(1-obs_info[obs_ind_temp2,4])
+          df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- pmax(0, df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3]+
+            0.5*obs_info[obs_ind_temp2,3]/(1-obs_info[obs_ind_temp2,4]))
           Int_info[which(Int_info[,obs_ind_temp2]==1),obs_ind_temp2] <- 0
         }
       }
@@ -679,8 +679,8 @@ DT_Alg_C <- function(obs_gen_para, lambda){
         } else{
           dt <- Dist_Euclidean(as.numeric(obs_info[obs_ind_temp,1:2]),c(50,1))
           # adjust based on false obstacle
-          df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp]==1),3]-
-            0.5*(obs_info[obs_ind_temp,3]+(dt/(1-obs_info[obs_ind_temp,4]))^(-log(1-obs_info[obs_ind_temp,4])))
+          df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- pmax(0, df_edge_ed[which(Int_info[,obs_ind_temp]==1),3]+
+            0.5*(obs_info[obs_ind_temp,3]+(dt/(1-obs_info[obs_ind_temp,4]))^(-log(1-obs_info[obs_ind_temp,4]))))
           Int_info[which(Int_info[,obs_ind_temp]==1),obs_ind_temp] <- 0 
         }
       } else{
@@ -697,8 +697,8 @@ DT_Alg_C <- function(obs_gen_para, lambda){
         } else{
           dt <- Dist_Euclidean(as.numeric(obs_info[obs_ind_temp2,1:2]),c(50,1))
           # false obstacle
-          df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3]-
-            0.5*(obs_info[obs_ind_temp2,3]+(dt/(1-obs_info[obs_ind_temp2,4]))^(-log(1-obs_info[obs_ind_temp2,4])))
+          df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- pmax(0, df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3]+
+            0.5*(obs_info[obs_ind_temp2,3]+(dt/(1-obs_info[obs_ind_temp2,4]))^(-log(1-obs_info[obs_ind_temp2,4]))))
           Int_info[which(Int_info[,obs_ind_temp2]==1),obs_ind_temp2] <- 0
         }
       }
@@ -772,8 +772,8 @@ DT_Alg_O <- function(obs_gen_para, lambda){
         } else{
           dt <- Dist_Euclidean(as.numeric(obs_info[obs_ind_temp,1:2]),c(50,1))
           # adjust based on false obstacle
-          df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp]==1),3]-
-            0.5*(obs_info[obs_ind_temp,3]+(dt/(1-obs_info[obs_ind_temp,4]))^(-log(1-obs_info[obs_ind_temp,4])))
+          df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- pmax(0, df_edge_ed[which(Int_info[,obs_ind_temp]==1),3]+
+            0.5*(obs_info[obs_ind_temp,3]+(dt/(1-obs_info[obs_ind_temp,4]))^(-log(1-obs_info[obs_ind_temp,4]))))
           Int_info[which(Int_info[,obs_ind_temp]==1),obs_ind_temp] <- 0 
         }
       } else{
@@ -790,8 +790,8 @@ DT_Alg_O <- function(obs_gen_para, lambda){
         } else{
           dt <- Dist_Euclidean(as.numeric(obs_info[obs_ind_temp2,1:2]),c(50,1))
           # false obstacle
-          df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3]-
-            0.5*(obs_info[obs_ind_temp2,3]+(dt/(1-obs_info[obs_ind_temp2,4]))^(-log(1-obs_info[obs_ind_temp2,4])))
+          df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- pmax(0, df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3]+
+            0.5*(obs_info[obs_ind_temp2,3]+(dt/(1-obs_info[obs_ind_temp2,4]))^(-log(1-obs_info[obs_ind_temp2,4]))))
           Int_info[which(Int_info[,obs_ind_temp2]==1),obs_ind_temp2] <- 0
         }
       }
@@ -801,9 +801,9 @@ DT_Alg_O <- function(obs_gen_para, lambda){
   return(output_final)
 }
 # 4. DT algorithm - input is the parameters of obstacle pattern (for mixed case)
-DT_Alg_M <- function(obs_gen_para, lambda, cost){
+DT_Alg_M <- function(obs_gen_para, lambda){
   # generate obstacle info
-  obs_info <- Mix_gen(obs_gen_para[1],obs_gen_para[2],obs_gen_para[3],obs_gen_para[4],obs_gen_para[5], lambda, cost)
+  obs_info <- Mix_gen(obs_gen_para[1],obs_gen_para[2],obs_gen_para[3],obs_gen_para[4],obs_gen_para[5], lambda)
   x <- 100; y <- 100; r <- 4.5
   # begin the loop to travel from s to t
   s <- 10151
@@ -865,8 +865,8 @@ DT_Alg_M <- function(obs_gen_para, lambda, cost){
         } else{
           dt <- Dist_Euclidean(as.numeric(obs_info[obs_ind_temp,1:2]),c(50,1))
           # adjust based on false obstacle
-          df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp]==1),3]-
-            0.5*(obs_info[obs_ind_temp,3]+(dt/(1-obs_info[obs_ind_temp,4]))^(-log(1-obs_info[obs_ind_temp,4])))
+          df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- pmax(0, df_edge_ed[which(Int_info[,obs_ind_temp]==1),3]+
+            0.5*(obs_info[obs_ind_temp,3]+(dt/(1-obs_info[obs_ind_temp,4]))^(-log(1-obs_info[obs_ind_temp,4]))))
           Int_info[which(Int_info[,obs_ind_temp]==1),obs_ind_temp] <- 0 
         }
       } else{
@@ -883,8 +883,8 @@ DT_Alg_M <- function(obs_gen_para, lambda, cost){
         } else{
           dt <- Dist_Euclidean(as.numeric(obs_info[obs_ind_temp2,1:2]),c(50,1))
           # false obstacle
-          df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3]-
-            0.5*(obs_info[obs_ind_temp2,3]+(dt/(1-obs_info[obs_ind_temp2,4]))^(-log(1-obs_info[obs_ind_temp2,4])))
+          df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- pmax(0, df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3]+
+            0.5*(obs_info[obs_ind_temp2,3]+(dt/(1-obs_info[obs_ind_temp2,4]))^(-log(1-obs_info[obs_ind_temp2,4]))))
           Int_info[which(Int_info[,obs_ind_temp2]==1),obs_ind_temp2] <- 0
         }
       }
@@ -989,8 +989,8 @@ AP_Alg_C <- function(obs_gen_para, lambda){
           df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- Inf
         } else{
           # adjust based on false obstacle
-          df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp]==1),3]-
-            0.5*(obs_info[obs_ind_temp,3] + ( 5*obs_info[obs_ind_temp,4]/ (1-(obs_info[obs_ind_temp,4])^(1-obs_info[obs_ind_temp,4])))) 
+          df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- pmax(0, df_edge_ed[which(Int_info[,obs_ind_temp]==1),3]+
+            0.5*(obs_info[obs_ind_temp,3] + ( 5*obs_info[obs_ind_temp,4]/ (1-(obs_info[obs_ind_temp,4])^(1-obs_info[obs_ind_temp,4]))))) 
             #0.5*(obs_info[obs_ind_temp,3] + (1-obs_info[obs_ind_temp,4]) )
           Int_info[which(Int_info[,obs_ind_temp]==1),obs_ind_temp] <- 0 
         }
@@ -1007,8 +1007,8 @@ AP_Alg_C <- function(obs_gen_para, lambda){
           df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- Inf
         } else{
           # false obstacle
-          df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3]-
-            0.5*(obs_info[obs_ind_temp,3] + ( 5*obs_info[obs_ind_temp,4]/ (1-(obs_info[obs_ind_temp,4])^(1-obs_info[obs_ind_temp,4])))) 
+          df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- pmax(0, df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3]+
+            0.5*(obs_info[obs_ind_temp,3] + ( 5*obs_info[obs_ind_temp,4]/ (1-(obs_info[obs_ind_temp,4])^(1-obs_info[obs_ind_temp,4]))))) 
           Int_info[which(Int_info[,obs_ind_temp2]==1),obs_ind_temp2] <- 0
         }
       }
@@ -1083,8 +1083,8 @@ AP_Alg_O <- function(obs_gen_para, lambda){
           df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- Inf
         } else{
           # adjust based on false obstacle
-          df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp]==1),3]-
-            0.5*(obs_info[obs_ind_temp,3] + ( 5*obs_info[obs_ind_temp,4]/ (1-(obs_info[obs_ind_temp,4])^(1-obs_info[obs_ind_temp,4])))) 
+          df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- pmax(0, df_edge_ed[which(Int_info[,obs_ind_temp]==1),3]+
+            0.5*(obs_info[obs_ind_temp,3] + ( 5*obs_info[obs_ind_temp,4]/ (1-(obs_info[obs_ind_temp,4])^(1-obs_info[obs_ind_temp,4]))))) 
           Int_info[which(Int_info[,obs_ind_temp]==1),obs_ind_temp] <- 0 
         }
       } else{
@@ -1100,8 +1100,8 @@ AP_Alg_O <- function(obs_gen_para, lambda){
           df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- Inf
         } else{
           # false obstacle
-          df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3]-
-            0.5*(obs_info[obs_ind_temp,3] + ( 5*obs_info[obs_ind_temp,4]/ (1-(obs_info[obs_ind_temp,4])^(1-obs_info[obs_ind_temp,4])))) 
+          df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- pmax(0, df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3]+
+            0.5*(obs_info[obs_ind_temp,3] + ( 5*obs_info[obs_ind_temp,4]/ (1-(obs_info[obs_ind_temp,4])^(1-obs_info[obs_ind_temp,4]))))) 
           Int_info[which(Int_info[,obs_ind_temp2]==1),obs_ind_temp2] <- 0
         }
       }
@@ -1112,9 +1112,9 @@ AP_Alg_O <- function(obs_gen_para, lambda){
   return(output_final)
 }
 # 4. RD algorithm - input is the parameters of obstacle pattern (for mixed case)
-AP_Alg_M <- function(obs_gen_para, lambda, cost){
+AP_Alg_M <- function(obs_gen_para, lambda ){
   # generate obstacle info
-  obs_info <- Mix_gen(obs_gen_para[1],obs_gen_para[2],obs_gen_para[3],obs_gen_para[4],obs_gen_para[5], lambda, cost)
+  obs_info <- Mix_gen(obs_gen_para[1],obs_gen_para[2],obs_gen_para[3],obs_gen_para[4],obs_gen_para[5], lambda)
   x <- 100; y <- 100; r <- 4.5
   # begin the loop to travel from s to t
   s <- 10151
@@ -1175,7 +1175,7 @@ AP_Alg_M <- function(obs_gen_para, lambda, cost){
           df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- Inf
         } else{
           # adjust based on false obstacle
-          df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp]==1),3]-
+          df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp]==1),3]+
             0.5*(obs_info[obs_ind_temp,3] + ( 5*obs_info[obs_ind_temp,4]/ (1-(obs_info[obs_ind_temp,4])^(1-obs_info[obs_ind_temp,4])))) 
           Int_info[which(Int_info[,obs_ind_temp]==1),obs_ind_temp] <- 0 
         }
@@ -1192,7 +1192,7 @@ AP_Alg_M <- function(obs_gen_para, lambda, cost){
           df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- Inf
         } else{
           # false obstacle
-          df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3]-
+          df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3]+
             0.5*(obs_info[obs_ind_temp,3] + ( 5*obs_info[obs_ind_temp,4]/ (1-(obs_info[obs_ind_temp,4])^(1-obs_info[obs_ind_temp,4])))) 
           Int_info[which(Int_info[,obs_ind_temp2]==1),obs_ind_temp2] <- 0
         }
@@ -1218,7 +1218,7 @@ AP_Alg_M <- function(obs_gen_para, lambda, cost){
 
 
 #Main algorithm - ACS 
-Update_graph_intersect_ACS<-function(g,x,y,circle_info,r, k){
+Update_graph_intersect_ACS<-function(g,x,y,circle_info,r, kei){
   #read circle center x,y coordinate c-cost,p-prabability,True or False Obstacles
   #circles=read.csv("example1.csv",header=FALSE)
   n <- nrow(circle_info)
@@ -1233,7 +1233,7 @@ Update_graph_intersect_ACS<-function(g,x,y,circle_info,r, k){
     for(j in 1:n1){
       index=which((elg[,1]==el[j,1] & elg[,2]==el[j,2]))
       #elg[index,3] <- elg[index,3]+0.5*circle_info[i,3]/(1-circle_info[i,4])
-      elg[index,3] <- elg[index,3]+0.5*( circle_info[i,3] + ( 1-circle_info[i,4])^(-k) ) 
+      elg[index,3] <- elg[index,3]+0.5*( circle_info[i,3] + (1 - circle_info[i,4])^(-kei) ) 
       int_info[index, i] <- 1
     }#inner loop
   }#outer loop
@@ -1247,7 +1247,7 @@ Update_graph_intersect_ACS<-function(g,x,y,circle_info,r, k){
 
 
 # 2. RD algorithm - input is the parameters of obstacle pattern (for clutter only)
-ACS_Alg_C <- function(obs_gen_para, k, lambda){
+ACS_Alg_C <- function(obs_gen_para, kei, lambda){
   # generate obstacle info
   obs_info <- Clutter_gen(obs_gen_para[1],obs_gen_para[2],obs_gen_para[3], lambda)
   x <- 100; y <- 100; r <- 4.5
@@ -1257,7 +1257,7 @@ ACS_Alg_C <- function(obs_gen_para, k, lambda){
   # create graph
   vertice_list <- Lattice_Vertices(x,y)
   G_original <- Graph_Discretized(x,y)
-  output_Ginfo <- Update_graph_intersect_ACS(G_original, x, y, obs_info, r, k)
+  output_Ginfo <- Update_graph_intersect_ACS(G_original, x, y, obs_info, r, kei)
   G_ed <- output_Ginfo$G_info
   Int_info <- output_Ginfo$Int_info
   df_edge_ed <- as_data_frame(G_ed, what="edges")
@@ -1310,8 +1310,8 @@ ACS_Alg_C <- function(obs_gen_para, k, lambda){
           df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- Inf
         } else{
           # adjust based on false obstacle
-          df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp]==1),3]-
-            0.5*( obs_info[obs_ind_temp,3] + ( 1-obs_info[obs_ind_temp,4])^(-k) )
+          df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- pmax(0, df_edge_ed[which(Int_info[,obs_ind_temp]==1),3]-
+            0.5*( obs_info[obs_ind_temp,3] + ( 1-obs_info[obs_ind_temp,4])^(-kei) ))
             #0.5*obs_info[obs_ind_temp,3]/(1-obs_info[obs_ind_temp,4])
           Int_info[which(Int_info[,obs_ind_temp]==1),obs_ind_temp] <- 0 
         }
@@ -1328,8 +1328,8 @@ ACS_Alg_C <- function(obs_gen_para, k, lambda){
           df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- Inf
         } else{
           # false obstacle
-          df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3]-
-            0.5*( obs_info[obs_ind_temp,3] + ( 1-obs_info[obs_ind_temp,4])^(-k) )
+          df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- pmax(0, df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3]-
+            0.5*( obs_info[obs_ind_temp,3] + ( 1-obs_info[obs_ind_temp,4])^(-kei) ))
           Int_info[which(Int_info[,obs_ind_temp2]==1),obs_ind_temp2] <- 0
         }
       }
@@ -1341,7 +1341,7 @@ ACS_Alg_C <- function(obs_gen_para, k, lambda){
 }
 
 # 3. RD algorithm - input is the parameters of obstacle pattern (for obstacle only)
-ACS_Alg_O <- function(obs_gen_para, k, lambda){
+ACS_Alg_O <- function(obs_gen_para, kei, lambda){
   # generate obstacle info
   obs_info <- Obstacle_gen(obs_gen_para[1],obs_gen_para[2],obs_gen_para[3], lambda)
   x <- 100; y <- 100; r <- 4.5
@@ -1351,7 +1351,7 @@ ACS_Alg_O <- function(obs_gen_para, k, lambda){
   # create graph
   vertice_list <- Lattice_Vertices(x,y)
   G_original <- Graph_Discretized(x,y)
-  output_Ginfo <- Update_graph_intersect_ACS(G_original, x, y, obs_info, r, k)
+  output_Ginfo <- Update_graph_intersect_ACS(G_original, x, y, obs_info, r, kei)
   G_ed <- output_Ginfo$G_info
   Int_info <- output_Ginfo$Int_info
   df_edge_ed <- as_data_frame(G_ed, what="edges")
@@ -1404,8 +1404,8 @@ ACS_Alg_O <- function(obs_gen_para, k, lambda){
           df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- Inf
         } else{
           # adjust based on false obstacle
-          df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp]==1),3]-
-            0.5*( obs_info[obs_ind_temp,3] + ( 1-obs_info[obs_ind_temp,4])^(-k) )
+          df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- pmax(0, df_edge_ed[which(Int_info[,obs_ind_temp]==1),3]-
+            0.5*( obs_info[obs_ind_temp,3] + ( 1-obs_info[obs_ind_temp,4])^(-kei) ))
           Int_info[which(Int_info[,obs_ind_temp]==1),obs_ind_temp] <- 0 
         }
       } else{
@@ -1421,8 +1421,8 @@ ACS_Alg_O <- function(obs_gen_para, k, lambda){
           df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- Inf
         } else{
           # false obstacle
-          df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3]-
-            0.5*( obs_info[obs_ind_temp,3] + ( 1-obs_info[obs_ind_temp,4])^(-k) )
+          df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- pmax(0, df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3]-
+            0.5*( obs_info[obs_ind_temp,3] + ( 1-obs_info[obs_ind_temp,4])^(-kei) ))
           Int_info[which(Int_info[,obs_ind_temp2]==1),obs_ind_temp2] <- 0
         }
       }
@@ -1433,9 +1433,9 @@ ACS_Alg_O <- function(obs_gen_para, k, lambda){
   return(output_final)
 }
 # 4. RD algorithm - input is the parameters of obstacle pattern (for mixed case)
-ACS_Alg_M <- function(obs_gen_para, k, lambda, cost){
+ACS_Alg_M <- function(obs_gen_para, kei, lambda, cost){
   # generate obstacle info
-  obs_info <- Mix_gen(obs_gen_para[1],obs_gen_para[2],obs_gen_para[3],obs_gen_para[4],obs_gen_para[5], lambda, cost)
+  obs_info <- Mix_gen(obs_gen_para[1],obs_gen_para[2],obs_gen_para[3],obs_gen_para[4],obs_gen_para[5], lambda, cost )
   x <- 100; y <- 100; r <- 4.5
   # begin the loop to travel from s to t
   s <- 10151
@@ -1443,7 +1443,7 @@ ACS_Alg_M <- function(obs_gen_para, k, lambda, cost){
   # create graph
   vertice_list <- Lattice_Vertices(x,y)
   G_original <- Graph_Discretized(x,y)
-  output_Ginfo <- Update_graph_intersect_ACS(G_original, x, y, obs_info, r, k)
+  output_Ginfo <- Update_graph_intersect_ACS(G_original, x, y, obs_info, r, kei)
   G_ed <- output_Ginfo$G_info
   Int_info <- output_Ginfo$Int_info
   df_edge_ed <- as_data_frame(G_ed, what="edges")
@@ -1496,8 +1496,8 @@ ACS_Alg_M <- function(obs_gen_para, k, lambda, cost){
           df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- Inf
         } else{
           # adjust based on false obstacle
-          df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp]==1),3]-
-            0.5*( obs_info[obs_ind_temp,3] + ( 1-obs_info[obs_ind_temp,4])^(-k) )
+          df_edge_ed[which(Int_info[,obs_ind_temp]==1),3] <- pmax(0, df_edge_ed[which(Int_info[,obs_ind_temp]==1),3]-
+            0.5*( obs_info[obs_ind_temp,3] + ( 1-obs_info[obs_ind_temp,4])^(-kei) ))
           Int_info[which(Int_info[,obs_ind_temp]==1),obs_ind_temp] <- 0 
         }
       } else{
@@ -1513,8 +1513,8 @@ ACS_Alg_M <- function(obs_gen_para, k, lambda, cost){
           df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- Inf
         } else{
           # false obstacle
-          df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3]-
-            0.5*( obs_info[obs_ind_temp,3] + ( 1-obs_info[obs_ind_temp,4])^(-k) )
+          df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3] <- pmax(0, df_edge_ed[which(Int_info[,obs_ind_temp2]==1),3]-
+            0.5*( obs_info[obs_ind_temp,3] + ( 1-obs_info[obs_ind_temp,4])^(-kei) ))
           Int_info[which(Int_info[,obs_ind_temp2]==1),obs_ind_temp2] <- 0
         }
       }
